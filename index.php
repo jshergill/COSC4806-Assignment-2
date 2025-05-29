@@ -1,4 +1,10 @@
 <?php 
+require_once('users.php');
+$users = new User();
+$users = $users->get_all_users();
+
+print_r($users_list);
+
 session_start();
  if (isset($_SESSION["authenticated"]) && $_SESSION["authenticated"] ==1) {
 
