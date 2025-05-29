@@ -1,20 +1,56 @@
+<?php
+require_once('user.php');
+
+if ($_SERVER["REQUEST_METHOD"]) {
+    $username = trim($_POST['username']);
+    $password = $_POST['password'];
+
+    if (strlength($password) < 8) {
+        die("Password must be at least 8 characters long.");
+    }
+
+    $user = new User();
+    echo $user->create_user($username, $password);
+}
+?>
+  
 DOCTYPE html>
 <html>
   <head>
-    <title>Login</title>
+    <title>Register</title>
+    <script>
+      function checkUsername() {
+        const username = document.getElementById('username').value;
+
+        if (username.length === 0) {
+          document.getElementById('user-status').innerText = '';
+          return;
+        }
+         fetch('check_username.php?username=' +            encodeURIComponent(username))
+          .then(response => response.text())
+          .then(data => {
+         if (data === 'taken') {
+              document.getElementById('user-status').innerText = '❌ Username already taken';
+              document.getElementById('user-status').style.color = 'red';
+         } else {
+              document.getElementById('user-status').innerText = '✅ Username available';
+              document.getElementById('user-status').style.color = 'green';
+            }  });
+     }
+    </script>
   </head>
   <body>
 
-    <h1>Login Form</h1>
+    <h1>Create Account</h1>
 
-    <form action="/Validate.php" method="post">
-      <label for="username">Username:</label><br>
-      <input type="text" id="username" name="username" value=""><br>
+    <form action="Register.php" method="post">
+      <label>Username:</label><br>
+      <input type="text" name="username" required><br><br>
 
-      <label for="password">Password:</label><br>
-      <input type="password" id="password" name="password" value=""><br> <br>
+      <label>Password (min 8 characters):</label><br>
+      <input type="password" name="password" minlength="8" required><br><br>
 
-      <input type="submit" value="Submit">
+      <input type="submit" value="Register">
     </form> 
 
   </body>
