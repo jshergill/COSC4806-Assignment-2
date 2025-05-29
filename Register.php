@@ -30,11 +30,11 @@ DOCTYPE html>
           .then(response => response.text())
           .then(data => {
          if (data === 'taken') {
-              document.getElementById('user-status').innerText = '❌ Username already taken';
+              document.getElementById('user-status').innerText = 'Username already taken';
               document.getElementById('user-status').style.color = 'red';
          } else {
-              document.getElementById('user-status').innerText = '✅ Username available';
-              document.getElementById('user-status').style.color = 'green';
+              document.getElementById('user-status').innerText = 'Username available';
+              
             }  });
      }
     </script>
