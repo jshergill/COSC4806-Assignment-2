@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"]) {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    if (strlength($password) < 8) {
+    if (strlen($password) < 8) {
         die("Password must be at least 8 characters long.");
     }
 
