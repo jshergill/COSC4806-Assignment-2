@@ -7,8 +7,10 @@ $user_list = $user->get_all_users();
 
 echo "<pre>";
 print_r($user_list);
-if (!isset($_SESSION["authenticated"]) || $_SESSION["authenticated"] != 1) {header("Location: login.php");
-exit();}
+if (!isset($_SESSION["authenticated"]) || $_SESSION["authenticated"] != 1) {
+  header("Location: login.php");
+  exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +20,7 @@ exit();}
   </head>
   <body>
     <h1>Assignment 2</h1>
-    <p>Welcome, <?= htmlspecialchars($_SESSION['username']) ?>!</p>
+    <p>Welcome, <?= htmlspecialchars($_SESSION['username']) ?></p>
     <p>Date: <?= date("Y-m-d") ?></p>
 
     <p><a href="logout.php">Logout</a></p>
