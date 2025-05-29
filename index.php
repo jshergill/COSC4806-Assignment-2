@@ -1,30 +1,10 @@
 <?php 
-require_once('users.php');
-$users = new User();
-$users = $users->get_all_users();
+require_once('user.php');
 
-print_r($users_list);
+$user = new User();
+$user_list = $user->get_all_users();
 
-session_start();
- if (isset($_SESSION["authenticated"]) && $_SESSION["authenticated"] ==1) {
+echo "<pre>";
+print_r($user_list);
 
-    } else{
-    header("Location: login.php");}
 ?>
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>COSC4806</title>
-  </head>
-  <body>
-
-    <h1>Assignment 1</h1>
-    <p>Welcome, <?=$_SESSION['username']?></p>
-    <p> Date:<? echo date("Y-m-d")?></p>
-
-
-  </body>
- <footer> 
-    <p> <a href = "/logout.php">Click here to logout.</a></p>
-</html>
