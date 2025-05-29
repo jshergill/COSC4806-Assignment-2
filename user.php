@@ -10,41 +10,53 @@ class User {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
-public function is_username_taken($username) {
-  $db = db_connect();
-  $stmt = $db->prepare("SELECT id FROM users WHERE username = :username");
-  $stmt->execute([':username' => $username]);
-  return $stmt->fetch() ? true : false;
-}
-
-public function create_user($username, $password) {
-  if ($this->is_username_taken($username)) {
-    return "Username already taken.";
+  public function is_username_taken($username) {
+    $db = db_connect();
+    $stmt = $db->prepare("SELECT Id FROM users WHERE username = :username");
+    $stmt->execute([':username' => $username]);
+    return $stmt->fetch() ? true : false;
   }
 
-  $db = db_connect();
-  $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+  public function create_user($username, $password) {
+    if ($this->is_username_taken($username)) {
+      return "Username already taken.";
+    }
 
-  $statement = $db->prepare("INSERT INTO users (username, password_hash) VALUES (:username, :password_hash)");
-  $success = $statement->execute([
-    ':username' => $username,
-    ':password_hash' => $hashed_password
-  ]);
+    // Password validation
+    if (
+      strlen($password) < 8 ||
+      !preg_match('/[A-Z]/', $password) ||
+      !preg_match('/[a-z]/', $password) ||
+      !preg_match('/[0-9]/', $password) ||
+      !preg_match('/[\W]/', $password)
+    ) {
+      return "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.";
+    }
 
-  return $success ? "Account created successfully." : "Error creating account.";
-}
+    $db = db_connect();
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-public function authenticate_user($username, $password) {
-  $db = db_connect();
+    $statement = $db->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
+    $success = $statement->execute([
+      ':username' => $username,
+      ':password' => $hashed_password
+    ]);
 
-  $stmt = $db->prepare("SELECT * FROM users WHERE username = :username");
-  $stmt->execute([':username' => $username]);
-  $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-  if ($user && password_verify($password, $user['password_hash'])) {
-    return $user;
+    return $success ? "Account created successfully." : "Error creating account.";
   }
 
-  return false;
+  public function authenticate_user($username, $password) {
+    $db = db_connect();
+
+    $stmt = $db->prepare("SELECT * FROM users WHERE username = :username");
+    $stmt->execute([':username' => $username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && password_verify($password, $user['password'])) {
+      return $user;
+    }
+
+    return false;
   }
 }
+

@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if (isset($_GET['message']) && $_GET['message'] === 'registered') {
+    echo "<p>Account created successfully! Please log in.</p>";
+}
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
